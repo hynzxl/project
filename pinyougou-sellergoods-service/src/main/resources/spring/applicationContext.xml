@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--配置事务-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--开启注解支持-->
+    <tx:annotation-driven/>
+    <!--1.dubbo访问端口号-->
+    <dubbo:protocol name="dubbo" port="20881"></dubbo:protocol>
+    <!--2.服务名-->
+    <dubbo:application name="pinyougou-sellergoods-service"/>
+    <!--3.注册地址-->
+    <dubbo:registry address="zookeeper://192.168.25.128:2181"/>
+    <!--4.服务扫描包-->
+    <dubbo:annotation package="com.pinyougou.sellergoods.service.impl"/>
+</beans>

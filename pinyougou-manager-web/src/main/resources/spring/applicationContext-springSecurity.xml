@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+             http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--1.配置访问资源-->
+    <http pattern="/controller/**" security="none"/>
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/img/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    <http pattern="/plugins/**" security="none"/>
+    <http pattern="/service/**" security="none"/>
+    <http pattern="/login.html" security="none"/>
+
+
+    <!--2.配置拦截资源-->
+    <http use-expressions="false">
+        <!--权限是ROLE_ADMIN的用户可以访问所有资源-->
+        <intercept-url pattern="/**" access="ROLE_ADMIN"/>
+        <!--登录页面为自定义login.html，当登录成功时，访问页面为/admin/index.html页面-->
+        <form-login login-page="/login.html" authentication-success-forward-url="/admin/index.html" always-use-default-target="true"/>
+        <csrf disabled="true"/>
+        <!--注销-->
+        <logout/>
+        <!-- 如果页面中使用了框架，则需要添加此属性，否则，框架不能使用 -->
+        <headers>
+            <frame-options policy="SAMEORIGIN"/>
+        </headers>
+    </http>
+
+    <!--3.配置认证管理器-->
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="admin" authorities="ROLE_ADMIN" password="123"/>
+                <user name="jzmb" authorities="ROLE_ADMIN" password="123"/>
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+</beans:beans>
